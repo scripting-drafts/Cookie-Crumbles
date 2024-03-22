@@ -7,7 +7,7 @@ from threading import Thread
 from sys import exit as sysexit
 from tqdm import tqdm
 
-'''107,3741,824 chars -> 1GB TXT -> 19,173,961,.. Onion candidates
+'''107,3741,824 chars -> 1GB TXT -> 19,173,961,.. lines, 56 characters
 9,586,980.5 -> 512
 4,793,490.25 -> 256
 TODO: Turn to bin'''
