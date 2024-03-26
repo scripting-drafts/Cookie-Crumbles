@@ -24,7 +24,7 @@ class Compression:
         self.cleanup(buffer)
 
 
-    def decompress_candidates(self, buffer):
+    def decompress_candidates(self, buffer, storage):
         files_path = os.path.join(buffer, '*')
         files = sorted(glob.iglob(files_path), key=os.path.getctime, reverse=True)
         file_names = [file for file in files if file.endswith('.zip')]
@@ -32,10 +32,8 @@ class Compression:
 
         with zipfile.ZipFile(file_name, 'r') as zip: 
             zip.printdir() 
-        
-            print('Extracting all the files now...') 
-            zip.extractall() 
-            print('Done!')
+            zip.extractall(os.path.join(storage))
+
 
     def cleanup(self, buffer):
         ''' Delete first files created if there's more than 15'''

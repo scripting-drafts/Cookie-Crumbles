@@ -18,9 +18,9 @@ alphanum = list(string.ascii_letters) + [2, 3, 4, 5, 6, 7]
 def generate_candidates():
     '''256MB Chunks'''  # 8MB for testing
     filename = uuid.uuid1()
-    f = open(f'buffer/{filename}', 'a')
+    f = open(f'{buffer}/{filename}', 'a')
 
-    for _ in tqdm(range(149,796)):    # 4793490
+    for _ in tqdm(range(14979)):    # 4793490
         output_string = [str(random.SystemRandom().choice(alphanum)) for _ in range(56)]
         output_string = ''.join(output_string) + '\n'
         f.write(output_string)
@@ -35,7 +35,6 @@ def generate_candidates():
 max_concurrent = 3
 pending = set()
 executor = ThreadPoolExecutor(max_workers=max_concurrent)
-threads_list = []
 cmp = compression.Compression()
 
 while True:
@@ -43,18 +42,12 @@ while True:
         for _ in range(max_concurrent):
             pending.add(executor.submit(generate_candidates))
 
-
         while len(pending) != 0:
             _, pending = wait(pending, return_when=FIRST_COMPLETED)
-
-        compression_thread = Thread(target=cmp.compress_candidates, args=(buffer,))
-        compression_thread.start()
-        threads_list.append(compression_thread)
         
     except Exception as e:
-        print(e)
+        executor.shutdown(cancel_futures=True)
         sysexit()
 
     finally:
-        for t in threads_list:
-            compression_thread.join()
+        cmp.compress_candidates(buffer)
