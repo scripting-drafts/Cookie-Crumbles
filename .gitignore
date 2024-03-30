@@ -3,3 +3,4 @@ randomness_stats.py
 buffer/*
 storage/*
 stats_cuda.py
+stats_gpu_cupy.py
